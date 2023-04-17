@@ -1,4 +1,4 @@
-name: Deploy to DigitalOcean registry
+name: Deploy to DigitalOcean Registry
 
 on:
   push:
