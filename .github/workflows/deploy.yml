@@ -15,9 +15,9 @@ jobs:
 
       - name: Login to DigitalOcean registry
         uses: digitalocean/action-doctl@v2
-        with:
+        env:
           TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} 
-        run: docker login registry.digitalocean.com -u TOKEN -p TOKEN
+        run: docker login registry.digitalocean.com -u $TOKEN -p $TOKEN
 
       - name: Build Docker image
         env:
