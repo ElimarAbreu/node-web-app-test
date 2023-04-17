@@ -26,7 +26,8 @@ jobs:
           DO_REGISTRY: registry.digitalocean.com/registrydo
           DO_REPOSITORY: node-web-app-test
           IMAGE_TAG: ${{ github.sha }}
-        run: docker build -t $DO_REGISTRY/$DO_REPOSITORY:$IMAGE_TAG .
+          CACHE_IMAGE_ID: ${{ github.sha }}
+        run: docker build -t $DO_REGISTRY/$DO_REPOSITORY:$IMAGE_TAG --cache-from $DO_REGISTRY/$DO_REPOSITORY:$IMAGE_TAG --build-arg CACHE_IMAGE_ID=$CACHE_IMAGE_ID .
 
       - name: Push Docker image to DigitalOcean registry
         env:
