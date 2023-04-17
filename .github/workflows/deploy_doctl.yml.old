@@ -1,0 +1,32 @@
+name: Deploy to DigitalOcean registry
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-do:
+    name: Docker build and Push to Digital Ocean
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Login to DigitalOcean registry
+        run: doctl registry login --expiry-seconds 600
+
+      - name: Build Docker image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: docker build -t registry.digitalocean.com/registrydo/node-web-app-test:$IMAGE_TAG .
+
+      - name: Push Docker image to DigitalOcean registry
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: docker push registry.digitalocean.com/registrydo/node-web-app-test:$IMAGE_TAG
