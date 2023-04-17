@@ -12,11 +12,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          TOKEN: ${{ secrets.DO_TOKEN }}
 
       - name: Login to DigitalOcean registry
-        env:
-          TOKEN: ${{ secrets.DO_TOKEN }}  
-        run: docker login registry.digitalocean.com -u TOKEN -p TOKEN
+        run: doctl registry login --expiry-seconds 600
 
       - name: Build Docker image
         env:
