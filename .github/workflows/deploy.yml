@@ -1,0 +1,23 @@
+name: Deploy to DigitalOcean registry
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-do:
+    name: Docker build and Push to Digital Ocean
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to DigitalOcean registry
+        run: echo $DO_TOKEN | docker login registry.digitalocean.com -u $DO_TOKEN --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t registry.digitalocean.com/registrydo/node-web-app-test:$GITHUB_SHA .
+
+      - name: Push Docker image to DigitalOcean registry
+        run: docker push registry.digitalocean.com/registrydo/node-web-app-test:$GITHUB_SHA
