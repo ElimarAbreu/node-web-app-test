@@ -14,10 +14,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Login to DigitalOcean registry
-        run: docker login registry.digitalocean.com -u dop_v1_16a56866661c0ee9736307fbfdd18fd8f2979be5ca7fad7878e99d06edcf5e5d -p dop_v1_16a56866661c0ee9736307fbfdd18fd8f2979be5ca7fad7878e99d06edcf5e5d
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          TOKEN: ${{ secrets.DO_TOKEN }}  
+        run: docker login registry.digitalocean.com -u TOKEN -p TOKEN
 
       - name: Build Docker image
-        run: docker build -t registry.digitalocean.com/registrydo/node-web-app-test:$GITHUB_SHA .
+        run: docker build -t registry.digitalocean.com/registrydo/node-web-app-test:$IMAGE_TAG .
 
       - name: Push Docker image to DigitalOcean registry
-        run: docker push registry.digitalocean.com/registrydo/node-web-app-test:$GITHUB_SHA
+        run: docker push registry.digitalocean.com/registrydo/node-web-app-test:$IMAGE_TAG
